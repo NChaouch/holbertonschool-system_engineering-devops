@@ -25,7 +25,7 @@
 6. **MySQL (Database)**:
    - A relational database used to store the data required by the application.
 
-7. **Arrows and Data Flows**:
+7. **Data Flows**:
    - **HTTP/HTTPS Request**: Flow between the user and Nginx.
    - **DNS Record A**: Arrow representing the domain resolution to an IP address.
    - **Forward Request**: Flow of requests forwarded from Nginx to the application server.
@@ -37,4 +37,26 @@
 
 ---
 
+### Legend
 
+1. **User**: The end-user sending a request via a browser or application.  
+2. **Load Balancer (HAProxy)**: Distributes incoming requests to available servers to prevent overload.  
+3. **Web Server (Nginx)**: Receives HTTP requests, serves static files, or forwards requests to application servers.  
+4. **Application Servers**: Servers (1 and 2) that process business logic, handle data, and generate dynamic responses.  
+5. **Database Cluster**:  
+   - **Primary Database (MySQL)**: Handles write and main read operations.  
+   - **Replica Database (MySQL)**: A replica of the primary database used to offload read operations.  
+
+---
+
+### Data Flows
+
+1. The user sends an HTTP/HTTPS request.  
+2. HAProxy forwards the request to an available Nginx server.  
+3. Nginx passes the request to one of the application servers (Application Server 1 or 2).  
+4. The application server queries the primary database for write or read operations.  
+5. Data is replicated from the primary database to the replica database for additional read operations.  
+6. The application server retrieves the necessary data from either the primary or replica database.  
+7. The application server sends the processed response back to Nginx.  
+8. Nginx forwards the response to the load balancer.  
+9. HAProxy sends the response back to the user.  
