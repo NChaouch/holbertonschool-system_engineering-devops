@@ -119,3 +119,60 @@ Here is a detailed explanation of the provided diagram. It represents a distribu
 ---
 # TASK 3
 ![Capture d'écran 2025-01-14 201734_task3](https://github.com/user-attachments/assets/a1225f02-e0ce-454c-a95b-a8236b1210fa)
+
+L'image montre une architecture logicielle organisée en plusieurs couches avec un flux de données clair entre les composants. Voici une explication des légendes et des interactions entre les différentes couches :
+
+### 1. **Load Balancer - HAProxy (équilibreur de charge)**
+   - **Rôle** : Répartit le trafic entre plusieurs serveurs pour assurer une distribution équilibrée des requêtes et éviter la surcharge.
+   - **Interaction** : 
+     - Le **Cluster** HAProxy en haut gère la redondance et la haute disponibilité, envoyant les requêtes à un deuxième niveau de HAProxy.
+     - Ce deuxième niveau de HAProxy distribue les requêtes aux serveurs Web de la **Web Layer**.
+
+---
+
+### 2. **Web Layer (Couche Web)**
+   - **Composants** : 
+     - **Web Server 1**
+     - **Web Server 2**
+   - **Rôle** : 
+     - Ces serveurs reçoivent les requêtes HTTP/S des utilisateurs via HAProxy.
+     - Ils servent le contenu statique (HTML, CSS, JavaScript) ou transmettent les requêtes dynamiques vers les serveurs d'applications de la couche suivante.
+   - **Interaction** :
+     - Les requêtes envoyées par les utilisateurs, via HAProxy, sont distribuées à l’un des serveurs Web.
+     - Ces serveurs transmettent les requêtes dynamiques (comme les traitements de données) vers l'**Application Layer**.
+
+---
+
+### 3. **Application Layer (Couche Application)**
+   - **Composants** : 
+     - **Application Server 1**
+     - **Application Server 2**
+   - **Rôle** :
+     - Gèrent les traitements applicatifs comme l'exécution de la logique métier, les transactions, ou les requêtes aux bases de données.
+   - **Interaction** :
+     - Les serveurs Web leur transmettent les requêtes nécessitant un traitement dynamique.
+     - Ils communiquent ensuite avec la couche base de données pour récupérer ou stocker des informations.
+
+---
+
+### 4. **Database Layer (Couche Base de Données)**
+   - **Composants** : 
+     - **Database Server - Primary**
+     - **Database Server - Secondary**
+   - **Rôle** : 
+     - Le **Primary** est le serveur principal qui gère les écritures et lectures des données.
+     - Le **Secondary** agit comme une réplique pour la redondance et peut être utilisé pour les lectures afin de réduire la charge sur le serveur principal.
+   - **Interaction** :
+     - Les serveurs d’applications envoient des requêtes SQL au serveur **Primary**.
+     - Le **Secondary** synchronise les données avec le **Primary** pour maintenir une copie fidèle.
+
+---
+
+### **Résumé des flux :**
+1. Les utilisateurs envoient des requêtes aux load balancers (HAProxy).
+2. Les load balancers dirigent les requêtes vers les serveurs Web disponibles dans la **Web Layer**.
+3. Les serveurs Web traitent les requêtes statiques ou transmettent les requêtes dynamiques aux serveurs d’applications dans la **Application Layer**.
+4. Les serveurs d’applications envoient des requêtes aux bases de données pour récupérer ou écrire des données.
+5. Les réponses suivent le chemin inverse pour arriver aux utilisateurs.
+
+Si vous avez besoin de plus de détails ou d'une mise en page différente, n'hésitez pas !
