@@ -31,6 +31,10 @@
    - **Forward Request**: Flow of requests forwarded from Nginx to the application server.
    - **Query**: Requests from the application server to the database.
    - **Response**: Responses sent by the database or application server to Nginx and then to the user.
+  
+# TASK 1
+![Capture d'écran 2025-01-14 151807_task1](https://github.com/user-attachments/assets/0dcd43b6-90f9-43c2-a817-9b0cd9e560bf)
 
 ---
+
 
