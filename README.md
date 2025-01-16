@@ -117,4 +117,5 @@ Here is a detailed explanation of the provided diagram. It represents a distribu
    - Database servers.
 
 ---
-
+# TASK 3
+![Capture d'écran 2025-01-14 201734_task3](https://github.com/user-attachments/assets/a1225f02-e0ce-454c-a95b-a8236b1210fa)
