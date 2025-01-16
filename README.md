@@ -120,59 +120,31 @@ Here is a detailed explanation of the provided diagram. It represents a distribu
 # TASK 3
 ![Capture d'écran 2025-01-14 201734_task3](https://github.com/user-attachments/assets/a1225f02-e0ce-454c-a95b-a8236b1210fa)
 
-L'image montre une architecture logicielle organisée en plusieurs couches avec un flux de données clair entre les composants. Voici une explication des légendes et des interactions entre les différentes couches :
+### **Legend**:
 
-### 1. **Load Balancer - HAProxy (équilibreur de charge)**
-   - **Rôle** : Répartit le trafic entre plusieurs serveurs pour assurer une distribution équilibrée des requêtes et éviter la surcharge.
-   - **Interaction** : 
-     - Le **Cluster** HAProxy en haut gère la redondance et la haute disponibilité, envoyant les requêtes à un deuxième niveau de HAProxy.
-     - Ce deuxième niveau de HAProxy distribue les requêtes aux serveurs Web de la **Web Layer**.
-
----
-
-### 2. **Web Layer (Couche Web)**
-   - **Composants** : 
-     - **Web Server 1**
-     - **Web Server 2**
-   - **Rôle** : 
-     - Ces serveurs reçoivent les requêtes HTTP/S des utilisateurs via HAProxy.
-     - Ils servent le contenu statique (HTML, CSS, JavaScript) ou transmettent les requêtes dynamiques vers les serveurs d'applications de la couche suivante.
-   - **Interaction** :
-     - Les requêtes envoyées par les utilisateurs, via HAProxy, sont distribuées à l’un des serveurs Web.
-     - Ces serveurs transmettent les requêtes dynamiques (comme les traitements de données) vers l'**Application Layer**.
+1. **Load Balancer - HAProxy**: Handles traffic distribution across servers to ensure load balancing and high availability.
+2. **Cluster**: A group of load balancers working together to provide redundancy and fault tolerance.
+3. **Web Layer**:
+   - **Web Server 1** and **Web Server 2**: Handle HTTP/S requests, serving static content or routing dynamic requests to application servers.
+4. **Application Layer**:
+   - **Application Server 1** and **Application Server 2**: Process business logic and manage application-related operations.
+5. **Database Layer**:
+   - **Database Server - Primary**: The main database handling read and write operations.
+   - **Database Server - Secondary**: A replica database for redundancy and handling read-only queries.
 
 ---
 
-### 3. **Application Layer (Couche Application)**
-   - **Composants** : 
-     - **Application Server 1**
-     - **Application Server 2**
-   - **Rôle** :
-     - Gèrent les traitements applicatifs comme l'exécution de la logique métier, les transactions, ou les requêtes aux bases de données.
-   - **Interaction** :
-     - Les serveurs Web leur transmettent les requêtes nécessitant un traitement dynamique.
-     - Ils communiquent ensuite avec la couche base de données pour récupérer ou stocker des informations.
+### **Data Flow**:
 
----
-
-### 4. **Database Layer (Couche Base de Données)**
-   - **Composants** : 
-     - **Database Server - Primary**
-     - **Database Server - Secondary**
-   - **Rôle** : 
-     - Le **Primary** est le serveur principal qui gère les écritures et lectures des données.
-     - Le **Secondary** agit comme une réplique pour la redondance et peut être utilisé pour les lectures afin de réduire la charge sur le serveur principal.
-   - **Interaction** :
-     - Les serveurs d’applications envoient des requêtes SQL au serveur **Primary**.
-     - Le **Secondary** synchronise les données avec le **Primary** pour maintenir une copie fidèle.
-
----
-
-### **Résumé des flux :**
-1. Les utilisateurs envoient des requêtes aux load balancers (HAProxy).
-2. Les load balancers dirigent les requêtes vers les serveurs Web disponibles dans la **Web Layer**.
-3. Les serveurs Web traitent les requêtes statiques ou transmettent les requêtes dynamiques aux serveurs d’applications dans la **Application Layer**.
-4. Les serveurs d’applications envoient des requêtes aux bases de données pour récupérer ou écrire des données.
-5. Les réponses suivent le chemin inverse pour arriver aux utilisateurs.
-
-Si vous avez besoin de plus de détails ou d'une mise en page différente, n'hésitez pas !
+1. **User Requests**: Incoming user requests are received by the **Cluster** of load balancers (**HAProxy**).
+2. **Load Balancing**: The load balancer distributes the requests to one of the **Web Layer** servers (**Web Server 1** or **Web Server 2**).
+3. **Web Layer**:
+   - If the request is for static content (e.g., HTML, CSS, JavaScript), the web server serves the content directly.
+   - For dynamic content, the web server forwards the request to the appropriate **Application Server**.
+4. **Application Layer**:
+   - Processes the request using business logic or other application-specific operations.
+   - Sends queries to the **Database Layer** for data retrieval or updates if required.
+5. **Database Layer**:
+   - The **Primary Database Server** handles all write and most read operations.
+   - The **Secondary Database Server** is used for read-only requests to reduce the load on the primary server.
+6. **Response Flow**: Data flows back through the **Application Layer** and **Web Layer** to the user, completing the request cycle.
