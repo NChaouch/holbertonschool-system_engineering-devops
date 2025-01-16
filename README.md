@@ -59,4 +59,62 @@
 6. The application server retrieves the necessary data from either the primary or replica database.  
 7. The application server sends the processed response back to Nginx.  
 8. Nginx forwards the response to the load balancer.  
-9. HAProxy sends the response back to the user.  
+9. HAProxy sends the response back to the user.
+
+# TASK 2
+![Capture d'écran 2025-01-14_200750_task2](https://github.com/user-attachments/assets/4747f47c-ce37-4761-a595-ab9acc554e21)
+
+Here is a detailed explanation of the provided diagram. It represents a distributed network architecture with data flows between different layers and components. I'll explain each part of the legend and the data flows:
+
+---
+
+### **Legend and Components:**
+
+1. **User:**  
+   The end-user accessing the system via HTTPS.
+
+2. **Firewall Cluster:**  
+   A group of firewalls (Firewall 1, Firewall 2, Firewall 3) that filter incoming traffic to ensure security before passing it to other components.
+
+3. **Load Balancer (SSL Termination):**  
+   A load balancer that distributes user traffic to web servers while handling SSL termination to secure connections.
+
+4. **Monitoring System:**  
+   A monitoring system consisting of multiple clients (Monitoring Client 1, 2, 3) that collect and analyze performance and health data from the components.
+
+5. **Web Servers:**  
+   Three web servers (Web Server 1, 2, 3) that process user requests and interact with the database.
+
+6. **Primary MySQL Server:**  
+   The main database server that handles SQL queries.
+
+7. **Replica MySQL Server:**  
+   A replica database server that contains a copy of the primary server's data, often used for failover or read-only operations.
+
+---
+
+### **Data Flows:**
+
+1. **HTTPS:**  
+   The user sends requests via HTTPS to the firewall cluster.
+
+2. **Firewall to Load Balancer:**  
+   The firewalls verify the security of requests before forwarding them to the load balancer.
+
+3. **Load Balancer to Web Servers:**  
+   The load balancer distributes incoming requests among the web servers (Web Server 1, 2, 3) to balance the load evenly.
+
+4. **Web Servers to Primary MySQL Server:**  
+   The web servers send database queries to the primary MySQL server to retrieve or update data.
+
+5. **Replication (Primary to Replica MySQL Server):**  
+   The primary MySQL server replicates its data to the replica server to ensure redundancy and enable failover or read-only access.
+
+6. **Monitoring Clients:**  
+   The monitoring clients collect performance and health data from the following:
+   - Load Balancer.
+   - Web Servers.
+   - Database servers.
+
+---
+
